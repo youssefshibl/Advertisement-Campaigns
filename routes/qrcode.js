@@ -6,6 +6,6 @@ const qrCodeController = new QRCodeController();
 
 
 router.post("/generate", async (req, res) => qrCodeController.generateQrCode(req, res));
-router.get("/redirection/:id/:uuid", async (req, res) => qrCodeController.redirectToCampaign(req, res));
+router.get("/redirection/:id", async (req, res) => qrCodeController.redirectToCampaign(req, res));
 
 module.exports = router;

@@ -13,8 +13,7 @@ const mongoose = require("mongoose");
 const campaigns = require("./routes/campaigns");
 const auth = require("./routes/auth");
 const qrCode = require("./routes/qrcode");
-
-
+const conversions = require("./routes/conversions");
 
 // ----------- middleware ------------
 
@@ -31,11 +30,7 @@ let base = process.env.SERVICE_BASE_PATH || "/api/v1";
 app.use(`${base}/campaigns`, campaigns);
 app.use(`${base}/auth`, auth);
 app.use(`${base}/qrcode`, qrCode);
-
-
-
-
-
+app.use(`${base}/conversions`, conversions);
 
 // ----------- start server ------------
 let mongoHost = process.env.MONGO_DB_HOST || "localhost";
@@ -48,11 +43,15 @@ let connectionString = `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:${mongo
 
 console.log(connectionString);
 
-mongoose.connect(connectionString).then(() => {
-  app.listen(process.env.SERVICE_PORT, process.env.SERVICE_HOST, () => {
-    console.log(`Server running at http://${process.env.SERVICE_HOST}:${process.env.SERVICE_PORT}/`);
+mongoose
+  .connect(connectionString)
+  .then(() => {
+    app.listen(process.env.SERVICE_PORT, process.env.SERVICE_HOST, () => {
+      console.log(
+        `Server running at http://${process.env.SERVICE_HOST}:${process.env.SERVICE_PORT}/`
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(err);
   });
-}).catch((err) => {
-  console.log(err);
-});
-

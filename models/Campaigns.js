@@ -36,14 +36,16 @@ const CampaignSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  platform: {
-    type: String,
-    required: true,
-    enum: ["app", "web"],
-  },
   web: {
     type: {
       url: {
+        type: String,
+      },
+    },
+  },
+  mobile: {
+    type: {
+      deeplink: {
         type: String,
       },
     },
