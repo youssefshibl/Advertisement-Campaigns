@@ -1,6 +1,7 @@
 const Campaign = require("../models/Campaigns");
 let Validator = require("validatorjs");
 const UUId = require("uuid");
+const Scan = require("../models/Scans");
 
 
 // make new object for generating QR code applay singleton pattern
@@ -60,25 +61,51 @@ class QrCodeController {
         }
     }
 
-    async getCampaign(req, res) {
-        // get campaign
-
+    async redirectToCampaign(req, res) {
         let id = req.params.id;
-        try {
-            let campaign = await Campaign.findById(id);
-            if (!campaign) {
-                return res.status(404).json({ message: "Campaign not found" });
-            }
-            return res.status(200).json(campaign);
-        } catch (error) {
-            let message = error.message;
-            return res.status(500).json({ message: message });
+        let uuid = req.params.uuid;
+        let campaign = await Campaign.findById(id);
+        if (!campaign) {
+            return res.status(404).json({ message: "Campaign not found" });
+        }
+        if (campaign.status !== "active") {
+            return res.status(400).json({ message: "Campaign is not active" });
+        }
+        let platform = campaign.platform;
+        await this.SaveInfoOfQrcodeScannded(req, campaign);
+        if (platform === "web") {
+            let app_name = process.env.SERVICE_NAME;
+            let url = `${campaign.web.url}?uuid=${uuid}&app_name=${app_name}`;
+            return res.redirect(url);
         }
     }
+
+    async SaveInfoOfQrcodeScannded(req, campaign) {
+
+        let uuid = req.params.uuid;
+        let date = new Date();
+        let ip = req.ip;
+        let location = req.headers["cf-ipcountry"] ?? "unknown";
+        let operationSystem = req.headers["user-agent"];
+        let device = req.headers["user-agent"];
+        let scan = new Scan({
+            campaignId: campaign.id,
+            uuid: uuid,
+            scannedAt: date,
+            ip: ip,
+            location: location,
+            operatingSystem: operationSystem,
+            device: device,
+        });
+
+        await scan.save();
+    }
+
 }
 
 
 
 
 
-module.exports = QrCodeController;
+module.exports = QrCodeController
+

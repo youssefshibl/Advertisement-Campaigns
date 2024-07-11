@@ -44,8 +44,11 @@ let mongoDbName = process.env.MONGO_DB_NAME || "campaigns";
 let mongoUser = encodeURIComponent(process.env.MONGO_DB_USER) || "";
 let mongoPass = encodeURIComponent(process.env.MONGO_DB_PASS) || "";
 
+let connectionString = `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:${mongoPort}/${mongoDbName}?authSource=admin`;
 
-mongoose.connect(`mongodb://${mongoUser}:${mongoPass}@${mongoHost}:${mongoPort}/${mongoDbName}?authSource=admin`).then(() => {
+console.log(connectionString);
+
+mongoose.connect(connectionString).then(() => {
   app.listen(process.env.SERVICE_PORT, process.env.SERVICE_HOST, () => {
     console.log(`Server running at http://${process.env.SERVICE_HOST}:${process.env.SERVICE_PORT}/`);
   });
