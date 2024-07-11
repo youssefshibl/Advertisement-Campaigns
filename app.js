@@ -12,6 +12,7 @@ const mongoose = require("mongoose");
 // load routes
 const campaigns = require("./routes/campaigns");
 const auth = require("./routes/auth");
+const qrCode = require("./routes/qrcode");
 
 
 
@@ -29,6 +30,7 @@ let base = process.env.SERVICE_BASE_PATH || "/api/v1";
 
 app.use(`${base}/campaigns`, campaigns);
 app.use(`${base}/auth`, auth);
+app.use(`${base}/qrcode`, qrCode);
 
 
 

@@ -16,7 +16,7 @@ router.post("/login", (req, res) => {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  let token = jwt.sign({ email: email }, process.env.JWT_SECRET, {
+  let token = jwt.sign({ email: email }, process.env.JWT_SECRET ?? "secret", {
     expiresIn: "1h",
   });
 

@@ -36,6 +36,18 @@ const CampaignSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  platform: {
+    type: String,
+    required: true,
+    enum: ["app", "web"],
+  },
+  web: {
+    type: {
+      url: {
+        type: String,
+      },
+    },
+  },
 });
 
 module.exports = mongoose.model("Campaign", CampaignSchema);
