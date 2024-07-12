@@ -8,6 +8,7 @@ require("dotenv").config();
 const app = express();
 const accessLogStream = require("./helpers/logs");
 const mongoose = require("mongoose");
+const { getRedisClient } = require("./helpers/redis");
 
 // load routes
 const campaigns = require("./routes/campaigns");
@@ -45,7 +46,9 @@ console.log(connectionString);
 
 mongoose
   .connect(connectionString)
-  .then(() => {
+  .then(async () => {
+    console.log("MongoDB connected");
+    await getRedisClient();
     app.listen(process.env.SERVICE_PORT, process.env.SERVICE_HOST, () => {
       console.log(
         `Server running at http://${process.env.SERVICE_HOST}:${process.env.SERVICE_PORT}/`

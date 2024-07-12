@@ -20,6 +20,7 @@
     "mongoose": "^8.5.0",
     "morgan": "^1.10.0",
     "node-device-detector": "^2.1.2",
+    "redis": "^4.6.15",
     "rotating-file-stream": "^3.2.3",
     "uuid": "^10.0.0",
     "validatorjs": "^3.22.1"

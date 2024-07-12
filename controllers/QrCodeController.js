@@ -81,14 +81,23 @@ class QrCodeController {
     // save info of qrcode scanned
     await this.SaveInfoOfQrcodeScannded(req, campaign);
 
+    // generate token string 
+    let token = "token_" + Math.random().toString(36).slice(2, 22);
+
     // redirect to campaign
-    if (!mobile) {
+    if (!mobile && campaign.web.url) {
       let app_name = process.env.SERVICE_NAME;
-      let url = `${campaign.web.url}?uuid=${uuid}&app_name=${app_name}`;
+      let url = `${campaign.web.url}?uuid=${uuid}&app_name=${app_name}&token=${token}`;
       return res.redirect(url);
     } else {
+      if (!campaign.mobile.deeplink && compiler.web.url) {
+        let app_name = process.env.SERVICE_NAME;
+        let url = `${campaign.web.url}?uuid=${uuid}&app_name=${app_name}&token=${token}`;
+        return
+      }
+
       // Send HTML with script to redirect to the app
-      let appDeepLink = `${campaign.mobile.deeplink}?uuid=${uuid}`;
+      let appDeepLink = `${campaign.mobile.deeplink}?uuid=${uuid}&app_name=${app_name}&token=${token}`;
 
       let html = `
          <!DOCTYPE html>
