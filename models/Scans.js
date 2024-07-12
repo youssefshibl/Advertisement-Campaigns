@@ -51,7 +51,10 @@ const ScanSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    location: locationSchema,
+    location: {
+        type: mongoose.Schema.Types.Mixed,
+        required: true,
+    },
     operatingSystem: {
         type: String,
     },

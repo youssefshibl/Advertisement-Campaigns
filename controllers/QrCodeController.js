@@ -117,7 +117,8 @@ class QrCodeController {
     let date = new Date();
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     const geo = geoip.lookup(ip);
-    let location = geo ? JSON.stringify(geo) : "Unknown";
+    let location = geo ?? {};
+    console.log(location);
     let device = req.user_agent.device?.type;
     let operatingSystem = req.user_agent.os?.name;
     let scan = new Scan({
