@@ -3,7 +3,9 @@ const Campaign = require("../models/Campaigns");
 const Scan = require("../models/Scans");
 const Conversion = require("../models/Conversions");
 const mongoose = require("mongoose");
-require("dotenv").config({ path: "../.env" });
+const path = require("path");
+let env_path = path.resolve("./") + "/.env";
+require("dotenv").config({ path: env_path });
 
 let mongoHost = process.env.MONGO_DB_HOST || "localhost";
 let mongoPort = process.env.MONGO_DB_PORT || "27017";
@@ -40,7 +42,7 @@ let ConversionsEvents = [
   "click on logourl",
 ];
 
-function main() {
+async function main() {
   Campaign.deleteMany({});
   Scan.deleteMany({});
   Conversion.deleteMany({});
@@ -74,7 +76,7 @@ function main() {
       let uuid = faker.string.uuid();
       let date = faker.date.recent();
       let ip = faker.internet.ip();
-      let location = faker.location.city();
+      let location = generateLocation();
       let operatingSystem = faker.helpers.arrayElement([
         "Windows",
         "Linux",
@@ -87,7 +89,7 @@ function main() {
         "Laptop",
         "Tablet",
         "Mobile",
-        "smartphone",
+        "Smartphone",
         "iPhone",
         "iPad",
       ]);
@@ -120,6 +122,8 @@ function main() {
           "            " + k + " Conversion created successfully! with event: ",
           events[k]
         );
+        // delay for 10 ms
+        await new Promise((resolve) => setTimeout(resolve, 20));
       }
     }
   }
@@ -129,15 +133,43 @@ function main() {
   process.exit(0);
 }
 
+
+function generateLocation() {
+  const latitude = faker.location.latitude();
+  const longitude = faker.location.longitude();
+
+  const location = {
+    range: [
+      faker.number.int({ min: 1000000000, max: 4294967295 }), // Example range start
+      faker.number.int({ min: 1000000000, max: 4294967295 }), // Example range end
+    ],
+    country: faker.location.countryCode(),
+    region: faker.location.state({ abbreviated: true }),
+    eu: faker.datatype.boolean() ? '1' : '0',
+    timezone: faker.location.timeZone(),
+    city: faker.location.city(),
+    ll: [parseFloat(latitude), parseFloat(longitude)],
+    metro: faker.number.int({ min: 1, max: 1000 }), // Example metro code
+    area: faker.number.int({ min: 500, max: 10000 }), // Example area size
+  };
+
+  // Ensure the range is in order
+  if (location.range[0] > location.range[1]) {
+    [location.range[0], location.range[1]] = [location.range[1], location.range[0]];
+  }
+
+  return location;
+}
+
 let connectionString = `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:${mongoPort}/${mongoDbName}?authSource=admin`;
 
 console.log(connectionString);
 
 mongoose
   .connect(connectionString)
-  .then(() => {
+  .then(async () => {
     try {
-      main();
+      await main();
     } catch (err) {
       console.log(err);
       // flush the database
@@ -145,9 +177,12 @@ mongoose
       Scan.deleteMany({});
       Conversion.deleteMany({});
       mongoose.connection.close();
+      console.log("Cleaned all data");
       process.exit(1);
     }
   })
   .catch((err) => {
     console.log(err);
   });
+
+

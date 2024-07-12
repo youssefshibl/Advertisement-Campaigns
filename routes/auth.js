@@ -17,7 +17,7 @@ router.post("/login", (req, res) => {
   }
 
   let token = jwt.sign({ email: email }, process.env.JWT_SECRET ?? "secret", {
-    expiresIn: "1h",
+    expiresIn: "1d",
   });
 
   return res.status(200).json({ token: token });

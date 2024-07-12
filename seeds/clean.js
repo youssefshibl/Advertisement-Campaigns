@@ -2,7 +2,9 @@ const Campaign = require("../models/Campaigns");
 const Scan = require("../models/Scans");
 const Conversion = require("../models/Conversions");
 const mongoose = require("mongoose");
-require("dotenv").config({ path: "../.env" });
+const path = require("path");
+let env_path = path.resolve("./") + "/.env";
+require("dotenv").config({ path: env_path });
 
 let mongoHost = process.env.MONGO_DB_HOST || "localhost";
 let mongoPort = process.env.MONGO_DB_PORT || "27017";
