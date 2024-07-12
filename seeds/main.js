@@ -16,9 +16,9 @@ let mongoPass = encodeURIComponent(process.env.MONGO_DB_PASS) || "";
 let deeplink = "twitter://user?screen_name=youssefshebl159";
 let webUrl = "https://twitter.com/youssefshebl159";
 
-let NumberOfCampaigns = 10;
-let NumberOfScansForCampaign = 10;
-let NumberOfConversionsForEveryScanSession = 5;
+let NumberOfCampaigns = 2;
+let NumberOfScansForCampaign = 300;
+let NumberOfConversionsForEveryScanSession = 3;
 let ConversionsEvents = [
   "click about",
   "click contact",
@@ -122,8 +122,8 @@ async function main() {
           "            " + k + " Conversion created successfully! with event: ",
           events[k]
         );
-        // delay for 10 ms
-        await new Promise((resolve) => setTimeout(resolve, 20));
+        // delay for 30 ms
+        await new Promise((resolve) => setTimeout(resolve, 30));
       }
     }
   }

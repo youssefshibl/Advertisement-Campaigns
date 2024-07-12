@@ -15,6 +15,7 @@ const campaigns = require("./routes/campaigns");
 const auth = require("./routes/auth");
 const qrCode = require("./routes/qrcode");
 const conversions = require("./routes/conversions");
+const statics = require("./routes/statistics");
 
 // ----------- middleware ------------
 
@@ -36,6 +37,7 @@ app.use(`${base}/campaigns`, campaigns);
 app.use(`${base}/auth`, auth);
 app.use(`${base}/qrcode`, qrCode);
 app.use(`${base}/conversions`, conversions);
+app.use(`${base}/statistics`, statics);
 
 // ----------- start server ------------
 let mongoHost = process.env.MONGO_DB_HOST || "localhost";

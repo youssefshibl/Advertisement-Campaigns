@@ -61,6 +61,21 @@ class ConversionsController {
 
     return res.status(201).send("");
   }
+
+  async getConversion(req, res) {
+
+    let uuid = req.params.uuid
+    // find many by uuid sorted by createdAt
+    let conversions = await Conversion.find
+      ({
+        uuid
+      }).sort({ createdAt: 1 });
+
+    if (!conversions) {
+      return res.status(404).json({ message: "Conversion not found" });
+    }
+    return res.status(200).json(conversions);
+  }
 }
 
 module.exports = ConversionsController;
