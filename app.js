@@ -19,7 +19,11 @@ const conversions = require("./routes/conversions");
 // ----------- middleware ------------
 
 // Setup the logger
-app.use(morgan("combined", { stream: accessLogStream }));
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+} else {
+  app.use(morgan("combined", { stream: accessLogStream }));
+}
 
 // set body parser
 app.use(bodyParser.json({ limit: "50mb" }));
