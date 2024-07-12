@@ -20,7 +20,6 @@ class CampaignsController {
       startDate: "required|date",
       endDate: "required|date",
       budget: "required|numeric",
-      platform: "required|in:app,web",
       "web.url": "required_if:platform,web|url",
     };
     let validation = new Validator(data, rules);

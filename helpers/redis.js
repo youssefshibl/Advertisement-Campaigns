@@ -17,7 +17,7 @@ async function createClient() {
     });
 
     client.connect().then(() => {
-      console.log('Redis client connected');
+      // console.log('Redis client connected');
       resolve(client);
     }).catch((error) => {
       console.error(error);

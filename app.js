@@ -9,6 +9,7 @@ const app = express();
 const accessLogStream = require("./helpers/logs");
 const mongoose = require("mongoose");
 const { getRedisClient } = require("./helpers/redis");
+let redisClient = null;
 
 // load routes
 const campaigns = require("./routes/campaigns");
@@ -39,28 +40,65 @@ app.use(`${base}/qrcode`, qrCode);
 app.use(`${base}/conversions`, conversions);
 app.use(`${base}/statistics`, statics);
 
+app.get("/test", (req, res) => {
+  res.send("Hello World");
+});
+
 // ----------- start server ------------
-let mongoHost = process.env.MONGO_DB_HOST || "localhost";
-let mongoPort = process.env.MONGO_DB_PORT || "27017";
-let mongoDbName = process.env.MONGO_DB_NAME || "campaigns";
-let mongoUser = encodeURIComponent(process.env.MONGO_DB_USER) || "";
-let mongoPass = encodeURIComponent(process.env.MONGO_DB_PASS) || "";
+async function startServer() {
+  let mongoHost = process.env.MONGO_DB_HOST || "localhost";
+  let mongoPort = process.env.MONGO_DB_PORT || "27017";
+  let mongoDbName = process.env.MONGO_DB_NAME || "campaigns";
+  let mongoUser = encodeURIComponent(process.env.MONGO_DB_USER) || "";
+  let mongoPass = encodeURIComponent(process.env.MONGO_DB_PASS) || "";
 
-let connectionString = `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:${mongoPort}/${mongoDbName}?authSource=admin`;
+  let connectionString = `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:${mongoPort}/${mongoDbName}?authSource=admin`;
 
-console.log(connectionString);
 
-mongoose
-  .connect(connectionString)
-  .then(async () => {
-    console.log("MongoDB connected");
-    await getRedisClient();
-    app.listen(process.env.SERVICE_PORT, process.env.SERVICE_HOST, () => {
-      console.log(
-        `Server running at http://${process.env.SERVICE_HOST}:${process.env.SERVICE_PORT}/`
-      );
+  if (process.env.NODE_ENV != "test") {
+    console.log(connectionString);
+  }
+
+
+  mongoose
+    .connect(connectionString)
+    .then(async () => {
+      if (process.env.NODE_ENV != "test") {
+        console.log("MongoDB connected");
+      }
+      redisClient = await getRedisClient();
+      if (process.env.NODE_ENV != "test") {
+        console.log("Redis connected");
+        app.listen(process.env.SERVICE_PORT, process.env.SERVICE_HOST, () => {
+          console.log(
+            `Server running at http://${process.env.SERVICE_HOST}:${process.env.SERVICE_PORT}/`
+          );
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+
+  if (process.env.NODE_ENV == "test") {
+    while (!redisClient) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+}
+
+async function stopServer() {
+  await mongoose.connection.close();
+  if (redisClient) {
+    await redisClient.quit();
+  }
+}
+
+
+if (process.env.NODE_ENV != "test") {
+  startServer();
+}
+
+
+
+module.exports = { app, startServer, stopServer }
