@@ -5,6 +5,7 @@ const Scan = require("../models/Scans");
 const geoip = require("geoip-lite");
 const DeviceDetector = require("node-device-detector");
 const { request } = require("express");
+const { getRedisClient } = require("../helpers/redis");
 const detector = new DeviceDetector({
   clientIndexes: true,
   deviceIndexes: true,
@@ -83,6 +84,9 @@ class QrCodeController {
 
     // generate token string 
     let token = "token_" + Math.random().toString(36).slice(2, 22);
+    const key = `user:${uuid}`;
+    let redisClient = await getRedisClient();
+    await redisClient.hSet(key, "token", token);
 
     // redirect to campaign
     if (!mobile && campaign.web.url) {
