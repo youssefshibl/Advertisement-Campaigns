@@ -19,8 +19,8 @@ let webUrl = process.env.ADECOMPANY_ENDPOINT || "https://twitter.com/youssefsheb
 
 
 let NumberOfCampaigns = 2;
-let NumberOfScansForCampaign = 1;
-let NumberOfConversionsForEveryScanSession = 3;
+let NumberOfScansForCampaign = 20;
+let NumberOfConversionsForEveryScanSession = 10;
 let ConversionsEvents = [
   "click about",
   "click contact",

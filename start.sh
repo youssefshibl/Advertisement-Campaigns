@@ -69,9 +69,9 @@ trap cleanup SIGINT SIGTERM
 http-server ./frontend/generate_qrcode -p 8001 >/dev/null 2>&1 &
 http-server ./frontend/ade_company_web -p 8002 >/dev/null 2>&1 &
 
-echo "Frontend server started on http://localhost:8001 and http://localhost:8002"
 
 # start node js server
 npm run seed:clean
 npm run seed:start
+echo "Frontend server started on http://localhost:8001 and http://localhost:8002"
 npm run start:dev

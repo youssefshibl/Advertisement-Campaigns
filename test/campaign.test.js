@@ -56,7 +56,7 @@ describe("Test the conversions routes", () => {
       .set("Authorization", "Bearer " + token);
 
     try {
-      expect(response.statusCode).toBe(202);
+      expect(response.statusCode).toBe(201);
       expect(response.body.name).toBe(data.name);
       expect(response.body.description).toBe(data.description);
       expect(response.body.status).toBe(data.status);
