@@ -14,10 +14,12 @@ let mongoUser = encodeURIComponent(process.env.MONGO_DB_USER) || "";
 let mongoPass = encodeURIComponent(process.env.MONGO_DB_PASS) || "";
 
 let deeplink = "twitter://user?screen_name=youssefshebl159";
-let webUrl = "https://twitter.com/youssefshebl159";
+// let webUrl = "https://twitter.com/youssefshebl159";
+let webUrl = process.env.ADECOMPANY_ENDPOINT || "https://twitter.com/youssefshebl159";
+
 
 let NumberOfCampaigns = 2;
-let NumberOfScansForCampaign = 300;
+let NumberOfScansForCampaign = 1;
 let NumberOfConversionsForEveryScanSession = 3;
 let ConversionsEvents = [
   "click about",
@@ -43,13 +45,13 @@ let ConversionsEvents = [
 ];
 
 async function main() {
-  Campaign.deleteMany({});
-  Scan.deleteMany({});
-  Conversion.deleteMany({});
+  await Campaign.deleteMany({});
+  await Scan.deleteMany({});
+  await Conversion.deleteMany({});
   for (let i = 0; i < NumberOfCampaigns; i++) {
     let name = faker.company.name();
     let description = faker.lorem.sentence();
-    let status = faker.helpers.arrayElement(["active", "inactive"]);
+    let status = "active"
     let startDate = faker.date.recent();
     let endDate = faker.date.future();
     let budget = faker.helpers.arrayElement([1000, 2000, 3000, 4000, 5000]);
@@ -71,6 +73,7 @@ async function main() {
     });
     campaign.save();
     console.log(i + " Campaign created successfully! with name: ", name);
+
 
     for (let j = 0; j < NumberOfScansForCampaign; j++) {
       let uuid = faker.string.uuid();

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <style>
+      .qrcode {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="qrcode">
+        <div id="state"></div>
+
+        <img
+          id="barcode"
+          src="https://api.qrserver.com/v1/create-qr-code/?data=HelloWorld&amp;size=100x100"
+          alt=""
+          title="HELLO"
+          width="300"
+          height="300"
+        />
+      </div>
+    </div>
+    <script src="./main.js"></script>
+  </body>
+</html>

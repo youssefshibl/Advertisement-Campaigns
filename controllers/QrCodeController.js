@@ -87,22 +87,21 @@ class QrCodeController {
     const key = `user:${uuid}`;
     let redisClient = await getRedisClient();
     await redisClient.hSet(key, "token", token);
+    let app_name = process.env.SERVICE_NAME;
 
     // redirect to campaign
     if (!mobile && campaign.web.url) {
-      let app_name = process.env.SERVICE_NAME;
       let url = `${campaign.web.url}?uuid=${uuid}&app_name=${app_name}&token=${token}`;
       return res.redirect(url);
     } else {
       if (!campaign.mobile.deeplink && compiler.web.url) {
-        let app_name = process.env.SERVICE_NAME;
         let url = `${campaign.web.url}?uuid=${uuid}&app_name=${app_name}&token=${token}`;
         return
       }
 
       // Send HTML with script to redirect to the app
-      let appDeepLink = `${campaign.mobile.deeplink}?uuid=${uuid}&app_name=${app_name}&token=${token}`;
-
+      // let appDeepLink = `${campaign.mobile.deeplink}?uuid=${uuid}&app_name=${app_name}&token=${token}`;
+      let appDeepLink ="twitter://user?screen_name=youssefshebl159";
       let html = `
          <!DOCTYPE html>
          <html>
@@ -131,7 +130,6 @@ class QrCodeController {
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     const geo = geoip.lookup(ip);
     let location = geo ?? {};
-    console.log(location);
     let device = req.user_agent.device?.type;
     let operatingSystem = req.user_agent.os?.name;
     let scan = new Scan({

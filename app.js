@@ -5,6 +5,7 @@ const rfs = require("rotating-file-stream");
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
+const cors = require("cors");
 const app = express();
 const accessLogStream = require("./helpers/logs");
 const mongoose = require("mongoose");
@@ -19,6 +20,10 @@ const conversions = require("./routes/conversions");
 const statics = require("./routes/statistics");
 
 // ----------- middleware ------------
+const corsOption = {
+  origin: "*",
+};
+app.use(cors(corsOption));
 
 // Setup the logger
 if (process.env.NODE_ENV === "development") {
@@ -54,11 +59,9 @@ async function startServer() {
 
   let connectionString = `mongodb://${mongoUser}:${mongoPass}@${mongoHost}:${mongoPort}/${mongoDbName}?authSource=admin`;
 
-
   if (process.env.NODE_ENV != "test") {
     console.log(connectionString);
   }
-
 
   mongoose
     .connect(connectionString)
@@ -94,11 +97,8 @@ async function stopServer() {
   }
 }
 
-
 if (process.env.NODE_ENV != "test") {
   startServer();
 }
 
-
-
-module.exports = { app, startServer, stopServer }
+module.exports = { app, startServer, stopServer };
