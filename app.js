@@ -11,6 +11,8 @@ const accessLogStream = require("./helpers/logs");
 const mongoose = require("mongoose");
 const { getRedisClient } = require("./helpers/redis");
 let redisClient = null;
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
 // load routes
 const campaigns = require("./routes/campaigns");
@@ -20,6 +22,17 @@ const conversions = require("./routes/conversions");
 const statics = require("./routes/statistics");
 
 // ----------- middleware ------------
+// setup rate limiter
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1
+  max: 120, // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
+
+// setup helmet
+app.use(helmet());
+
+// setup cors policy
 const corsOption = {
   origin: "*",
 };
