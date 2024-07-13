@@ -1,0 +1,57 @@
+name: Deploy Report & Coverage Testing to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as needed
+  pull_request:
+    branches:
+      - main  # Adjust the branch name as needed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Use the appropriate Node.js version for your project
+
+      - name: Copy .env.pipeline to .env
+        run: cp .env.pipeline .env
+
+      - name: Wait for MongoDB and Redis to be ready
+        run: |
+          while ! nc -z localhost 27017; do
+            sleep 1
+          done
+          while ! nc -z localhost 6379; do
+            sleep 1
+          done
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests and generate coverage report
+        run: npm run test:cov:html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./coverage  # Directory with the generated coverage report
+          publish_branch: gh-pages  # Branch to deploy to (GitHub Pages branch)

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "test:cov": "cross-env NODE_ENV=test jest --testTimeout=10000  --coverage  --coverageReporters='cobertura' --coverageReporters='text'",
-    "test:cov:html": "cross-env NODE_ENV=test jest --testTimeout=10000  --coverage --coverageReporters='html'",
+    "test:cov:html": "cross-env NODE_ENV=test jest --testTimeout=10000  --coverage --coverageReporters='html' --coverageReporters='text' ",
     "start:dev": "nodemon app.js",
     "start": "node app.js",
     "seed:start": "node ./seeds/main.js",
