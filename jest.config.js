@@ -8,7 +8,7 @@ module.exports = {
       "jest-html-reporter",
       {
         pageTitle: "Test Report",
-        outputPath: "reports/test-report.html",
+        outputPath: "reports/index.html",
         includeFailureMsg: true,
         includeConsoleLog: true,
       },
