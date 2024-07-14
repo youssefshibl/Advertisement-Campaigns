@@ -73,10 +73,12 @@ jobs:
         with:
           github-token: ${{ secrets.MY_TOKEN }}
           script: |
-            const url = `https://${{ github.actor }}.github.io/${{ github.event.repository.name }}/`;
+            const url = `https://${{ github.actor }}.github.io/${{ github.event.repository.name }}/coverage`;
+            const url2 = `https://${{ github.actor }}.github.io/${{ github.event.repository.name }}/`;
+
             github.rest.issues.createComment({
               issue_number: ${{ github.event.pull_request.number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `The coverage report has been deployed to: [${url}](${url})`
+              body: `The coverage report has been deployed to: [${url}](${url}) and [${url2}](${url2})`
             });

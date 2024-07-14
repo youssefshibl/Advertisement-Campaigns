@@ -9,7 +9,7 @@ module.exports = {
       "jest-html-reporter",
       {
         pageTitle: "Test Report",
-        outputPath: "testing/report/index.html",
+        outputPath: "testing/index.html",
         includeFailureMsg: true,
         includeConsoleLog: true,
       },
