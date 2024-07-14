@@ -243,6 +243,48 @@ docker run -it --rm -p 8000:8000 -v ${PWD}/.env.docker:/usr/src/app/.env advcomp
 ```
 > **_NOTE:_**  the `.env.docker` file is same `.env` file but change mongodb host & redis host to my local ip address to make docker container can access the mongodb and redis
 
+## 	🚀 Statistics
+the statistics of the scans of the QR code will be stored in the database and we can get the statistics by the following steps
+```json
+{
+  "total": 20,
+  "location": {
+    "KW": 5,
+    "GN": 5,
+    "NE": 2,
+    "KY": 10,
+  },
+  "operatingSystem": {
+    "iOS": 5,
+    "Windows": 9,
+    "Linux": 4,
+    "Android": 2
+  },
+  "device": {
+    "Smartphone": 5,
+    "Tablet": 3,
+    "Mobile": 3,
+    "iPhone": 5,
+    "iPad": 2,
+    "Laptop": 2
+  }
+}
+```
+
+
+## ❌ Future problems
+
+1. Big data in the database specially in conversions collection so this will make the service slow when read the data from the database which related with specific user so we can solve this by indexing the data in the database and use `sharding` to distribute the data on multiple servers
+2. High rate of the events that will be sent from the company's website or app to the backend service so we can solve this by using `pub/sub` to send the events to the backend service and use `redis` to store the tokens and the uuid of the users to make the service `stateless`
+
+## 🛩️ Future Plans
+1. Add more tests for the service
+2. Make github actions pipeline for Build Docker image and push it to the docker hub
+3. Make github actions pipeline for deploy the service to the kubernetes cluster
+4. Make the service is `scalable` and `resilient` by using `Kubernetes`
+5. Make the service is `monitorable` by using `Prometheus` and `Grafana`
+6. Make the service is `secure` by using `Istio` and `Opa`
+
 ## 📦 Technologies
 
 - Node.js + express.js
@@ -256,3 +298,7 @@ docker run -it --rm -p 8000:8000 -v ${PWD}/.env.docker:/usr/src/app/.env advcomp
 - JWT
 - QR code generator
 - Morgan ( Logger )
+
+
+
+
