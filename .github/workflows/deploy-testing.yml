@@ -58,3 +58,21 @@ jobs:
           github_token: ${{ secrets.MY_TOKEN }}
           publish_dir: ./coverage  # Directory with the generated coverage report
           publish_branch: gh-pages  # Branch to deploy to (GitHub Pages branch)
+
+
+  notify:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add a comment on the pull request
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.MY_TOKEN }}
+          script: |
+            const url = `https://${{ github.repository_owner }}.github.io/${{ github.repository }}/coverage`;
+            github.rest.issues.createComment({
+              issue_number: ${{ github.event.pull_request.number }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `The coverage report has been deployed to: [${url}](${url})`
+            });
