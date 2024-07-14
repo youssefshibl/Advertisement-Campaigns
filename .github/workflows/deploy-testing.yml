@@ -60,7 +60,7 @@ jobs:
           publish_branch: gh-pages 
 
   notify:
-    needs: build
+    needs: generate_and_deploy
     runs-on: ubuntu-latest
     steps:
       - name: Add a comment on the pull request
