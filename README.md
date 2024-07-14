@@ -169,6 +169,17 @@ every PR into main branch in repository will trigger the github action pipeline 
   <img src="./docs/deploy2.jpg" width="48%" /> 
 </p>
 
+## 🔋 Logs
+
+we can use `morgan` to log the requests and the responses of the service , logs will be like
+```bash
+::ffff:127.0.0.1 - - [14/Jul/2024:00:46:40 +0000] "GET /api/v1/campaigns/66931ff01dc80e69c9640103 HTTP/1.1" 200 495 "-" "-"
+::ffff:127.0.0.1 - - [14/Jul/2024:00:46:40 +0000] "GET /api/v1/campaigns HTTP/1.1" 200 497 "-" "-"
+::ffff:127.0.0.1 - - [14/Jul/2024:00:46:40 +0000] "PUT /api/v1/campaigns/66931ff01dc80e69c9640103 HTTP/1.1" 200 513 "-" "-"
+::ffff:127.0.0.1 - - [14/Jul/2024:00:46:40 +0000] "DELETE /api/v1/campaigns/66931ff01dc80e69c9640103 HTTP/1.1" 204 - "-" "-"
+```
+in future we can use `Winston` to log the requests and the responses of the service and we can use `Elasticsearch` to store the logs and use `Kibana` to visualize the logs
+
 ## 📦 Compnents
 
 - MongoDB : to store the data of the campaigns and the scans but why we use MongoDB because it is `NoSQL` database and we can store the data in `JSON` format and we can store the data of the scans in the same collection of the campaigns to make the service `stateless` and we can use the `aggregation` to get the statistics of the scans and for heavy write operations we can use `sharding` to distribute the data on multiple servers in hight scale applications as well as our system is write heavt so mongo is the best choice for this system because it is `schemaless` and we can store the data in `JSON` format
@@ -279,11 +290,12 @@ the statistics of the scans of the QR code will be stored in the database and we
 
 ## 🛩️ Future Plans
 1. Add more tests for the service
-2. Make github actions pipeline for Build Docker image and push it to the docker hub
-3. Make github actions pipeline for deploy the service to the kubernetes cluster
-4. Make the service is `scalable` and `resilient` by using `Kubernetes`
-5. Make the service is `monitorable` by using `Prometheus` and `Grafana`
-6. Make the service is `secure` by using `Istio` and `Opa`
+2. Add logs for the service using `Winston`
+3. Make github actions pipeline for Build Docker image and push it to the docker hub
+4. Make github actions pipeline for deploy the service to the kubernetes cluster
+5. Make the service is `scalable` and `resilient` by using `Kubernetes`
+6. Make the service is `monitorable` by using `Prometheus` and `Grafana`
+7. Make the service is `secure` by using `Istio` and `Opa`
 
 ## 📦 Technologies
 
