@@ -67,7 +67,7 @@ jobs:
         with:
           github_token: ${{ secrets.MY_TOKEN }}
           publish_dir: ./reports  # Directory with the generated coverage report
-          publish_branch: testing  # Branch to deploy to (GitHub Pages branch)    
+          publish_branch: gh-pages-testing  # Branch to deploy to (GitHub Pages branch)   
 
 
   notify:
