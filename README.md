@@ -184,7 +184,7 @@ in future we can use `Winston` to log the requests and the responses of the serv
 
 - MongoDB : to store the data of the campaigns and the scans but why we use MongoDB because it is `NoSQL` database and we can store the data in `JSON` format and we can store the data of the scans in the same collection of the campaigns to make the service `stateless` and we can use the `aggregation` to get the statistics of the scans and for heavy write operations we can use `sharding` to distribute the data on multiple servers in hight scale applications as well as our system is write heavt so mongo is the best choice for this system because it is `schemaless` and we can store the data in `JSON` format
 
-- Redis : to store the tokens of the users and the uuid of the users to make the service `stateless` and we can use the `pub/sub` to send the events from the company's website or app to the backend service as well as the events that will be send from the company's website or app will be high rate and we should authenticate user for every event so we should use memory database to store the tokens and the uuid of the users to speed read operations for check the authentication of the user 
+- Redis : to store the tokens of the users and the uuid of the users to make the service `stateless` and in future we can use the `pub/sub` to send the events from the company's website or app to the backend service as well as the events that will be send from the company's website or app will be high rate and we should authenticate user for every event so we should use memory database to store the tokens and the uuid of the users to speed read operations for check the authentication of the user 
 
 
 ## 💉 Database schema
