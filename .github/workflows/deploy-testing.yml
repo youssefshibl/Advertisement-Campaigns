@@ -52,22 +52,12 @@ jobs:
       - name: Run tests and generate coverage report
         run: npm run test:cov:html
 
-      - name: Run tests and generate testing report
-        run: npm run test  
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.MY_TOKEN }}
           publish_dir: ./coverage  # Directory with the generated coverage report
           publish_branch: gh-pages  # Branch to deploy to (GitHub Pages branch)
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.MY_TOKEN }}
-          publish_dir: ./reports  # Directory with the generated coverage report
-          publish_branch: gh-pages-testing  # Branch to deploy to (GitHub Pages branch)   
 
 
   notify:
@@ -79,11 +69,10 @@ jobs:
         with:
           github-token: ${{ secrets.MY_TOKEN }}
           script: |
-            const url = `https://${{ github.actor }}.github.io/${{ github.event.repository.name }}/gh-pages`;
-            const url2 = `https://${{ github.actor }}.github.io/${{ github.event.repository.name }}/testing`;
+            const url = `https://${{ github.actor }}.github.io/${{ github.event.repository.name }}/`;
             github.rest.issues.createComment({
               issue_number: ${{ github.event.pull_request.number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `The coverage report has been deployed to: [${url}](${url}) and the testing report has been deployed to: [${url2}](${url2}).`
+              body: `The coverage report has been deployed to: [${url}](${url})`
             });
