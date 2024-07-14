@@ -1,15 +1,12 @@
-name: Deploy Report & Coverage Testing to GitHub Pages
+name: Generate Testing and Coverage Report and Deploy Them to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main  # Adjust the branch name as needed
   pull_request:
     branches:
-      - main  # Adjust the branch name as needed
+      - main
 
 jobs:
-  build:
+  generate_and_deploy:
     runs-on: ubuntu-latest
 
     services:
@@ -19,7 +16,7 @@ jobs:
           - 27017:27017
         env:
           MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: rootpassword  
+          MONGO_INITDB_ROOT_PASSWORD: rootpassword
       redis:
         image: redis:latest
         ports:
@@ -32,7 +29,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # Use the appropriate Node.js version for your project
+          node-version: "16" 
 
       - name: Copy .env.pipeline to .env
         run: cp .env.pipeline .env
@@ -49,6 +46,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Run tests
+        run: npm run test
+
       - name: Run tests and generate coverage report
         run: npm run test:cov:html
 
@@ -56,5 +56,24 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.MY_TOKEN }}
-          publish_dir: ./coverage  # Directory with the generated coverage report
-          publish_branch: gh-pages  # Branch to deploy to (GitHub Pages branch)
+          publish_dir: ./testing 
+          publish_branch: gh-pages 
+
+  notify:
+    needs: generate_and_deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add a comment on the pull request
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.MY_TOKEN }}
+          script: |
+            const url = `https://${{ github.actor }}.github.io/${{ github.event.repository.name }}/coverage`;
+            const url2 = `https://${{ github.actor }}.github.io/${{ github.event.repository.name }}/`;
+
+            github.rest.issues.createComment({
+              issue_number: ${{ github.event.pull_request.number }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `The Testing Report is available [here](${url2}) \n the Coverage Report is available [here](${url}).`
+            });
