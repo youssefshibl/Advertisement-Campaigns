@@ -48,15 +48,19 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+      
+      - name: Run tests
+        run: npm run test
 
       - name: Run tests and generate coverage report
         run: npm run test:cov:html
+   
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.MY_TOKEN }}
-          publish_dir: ./coverage  # Directory with the generated coverage report
+          publish_dir: ./testing  # Directory with the generated coverage report
           publish_branch: gh-pages  # Branch to deploy to (GitHub Pages branch)
 
 
