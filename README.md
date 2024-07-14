@@ -153,11 +153,28 @@ npm run test:cov:html
 </p>
 
 
+## 🚧 Testing Github Action pipeline 
+every PR into main branch in repository will trigger the github action pipeline to run the tests and generate testing & coverage reports and deploy the repository to github pages to make developers can access testing reports and coverage reports
+
+> **_NOTE:_**  developers can access the testing reports and coverage reports by clicking in here in comment which will add automatically by the github action pipeline after the pipeline is done and the reports are generated
+
+
+<p float="left">
+  <img src="./docs/pipe1.png" width="48%" />
+  <img src="./docs/pipe2.png" width="48%" /> 
+</p>
+
+<p float="left">
+  <img src="./docs/deploy1.jpg" width="48%" />
+  <img src="./docs/deploy2.jpg" width="48%" /> 
+</p>
+
 ## 📦 Compnents
 
 - MongoDB : to store the data of the campaigns and the scans but why we use MongoDB because it is `NoSQL` database and we can store the data in `JSON` format and we can store the data of the scans in the same collection of the campaigns to make the service `stateless` and we can use the `aggregation` to get the statistics of the scans and for heavy write operations we can use `sharding` to distribute the data on multiple servers in hight scale applications as well as our system is write heavt so mongo is the best choice for this system because it is `schemaless` and we can store the data in `JSON` format
 
-- Redis : to store the tokens of the users and the uuid of the users to make the service `stateless` and we can use the `pub/sub` to send the events from the company's website or app to the backend service as well as the events that will be send from the company's website or app will be high rate and we should authenticate user for every event so we should use memory database to store the tokens and the uuid of the users to speed read operations for check the authentication of the user
+- Redis : to store the tokens of the users and the uuid of the users to make the service `stateless` and we can use the `pub/sub` to send the events from the company's website or app to the backend service as well as the events that will be send from the company's website or app will be high rate and we should authenticate user for every event so we should use memory database to store the tokens and the uuid of the users to speed read operations for check the authentication of the user 
+
 
 ## 💉 Database schema
 
