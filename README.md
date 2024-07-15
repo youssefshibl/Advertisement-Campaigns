@@ -20,7 +20,7 @@ measuring conversions
 
 ## 🔫 Flow of the service
 
-1. User creates a campaign with a name and a target info (URL, phone number, etc)
+1. Admin creates a campaign with a name and a target info (URL, phone number, etc)
 2. User generates a QR code for the campaign
    - Get id of the campaign
    - Get URL which related to the campaign
