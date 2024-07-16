@@ -228,7 +228,9 @@ we have two collections in the database
       "ll": ["number", "number"],
       "metro": "number",
       "area": "number"
-    }
+    },
+    "operatingSystem":"string",
+    "device":"string"
   },
   "conversions": {
     "uuid": "string",
