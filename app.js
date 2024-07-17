@@ -59,6 +59,7 @@ app.use(`${base}/qrcode`, qrCode);
 app.use(`${base}/conversions`, conversions);
 app.use(`${base}/statistics`, statics);
 
+// health check endpoint
 app.get("/test", (req, res) => {
   res.send("Hello World");
 });
